@@ -1,46 +1,55 @@
-# **Silhouette Tracker: Real-Time Human Pose Estimation via YOLOv8 with CUDA Acceleration**
+# Silhouette Tracker: Оценка позы человека в реальном времени с аппаратным ускорением CUDA
 
-Система отслеживания человеческих поз в реальном времени с использованием **YOLOv8** и аппаратного ускорения **NVIDIA CUDA**. Проект реализован в изолированном окружении на базе **Conda** для обеспечения воспроизводимости и переносимости.
+*Конвейер оценки позы человека в реальном времени, полностью настроенный в изолированном Conda-окружении для простой установки, воспроизводимости и переносимости.*
 
-> **Примечание**:  
-Это учебный проект, направленный на демонстрацию современных рабочих процессов компьютерного зрения и ускорения CUDA, а не на создание производственной системы отслеживания.
+## Доступная документация / Available Documentation
 
-## **Предварительные требования**
+- [English Documentation](README.md) (current document / текущий документ)
+- [Документация на русском языке](README_RU.md)
 
-1. **ОС:** Linux x86_64.
-2. **Менеджер пакетов python:** Conda (Anaconda, Miniconda, Mamba или Micromamba).
-3. **NVIDIA CUDA:** версия CUDA должна быть 12.6.3 или выше, а также должны быть установлены соответствующие драйверы NVIDIA.
+## Структура проекта
 
-## **Структура проекта**
-
-```bash
-.
-├──.env.example # Шаблон конфигурации
-├── SBOMs/      # Метаданные зависимостей
-├── app/        # Исходный код приложения
-├── models/     # Модели YOLOv8 для работы
-└── videos/     # Видео для работы
+```
+silhouette-tracker/
+├── .env.example    # Шаблон конфигурации
+├── SBOMs/          # Метаданные зависимостей
+├── app/            # Исходный код приложения
+├── models/         # Модели YOLOv8 для работы
+└── videos/         # Видео для работы
 ```
 
-## **Инструкция по установке и запуску**
+## Инструкция по установке и запуску
 
-### **I. Клонирование репозитория**
+### I. Предварительные требования
+
+| Компонент | Требование |
+| :--- | :--- |
+| **Менеджер пакетов** | [`Micromamba`](https://github.com/mamba-org/mamba) |
+| **Операционная система** | GNU/Linux-система |
+| **Архитектура** | `x86_64` |
+| **Аппаратное обеспечение** | Видеокарта NVIDIA с драйвером, поддерживающим CUDA >= 12.6.3 |
+| **Инструменты разработки** *(Опционально)* | [`conda-lock`](https://github.com/conda/conda-lock) и [`pip-licenses`](https://github.com/raimon49/pip-licenses) |
+
+> **Примечание:**  
+> Это не строгие требования, а базовое окружение, в котором код гарантированно работает «из коробки». Возможны альтернативные настройки, но они могут потребовать ручной конфигурации.
+
+### II. Клонирование репозитория
 
 ```bash
-git clone https://github.com/Sierra-Arn/silhouette-tracker-python.git
-cd silhouette-tracker-python
+git clone https://github.com/snegoviol/silhouette-tracker.git
+cd silhouette-tracker
 ```
 
-### **II. Создание и активация виртуальной среды**
+### III. Создание и активация виртуальной среды
 
 ```bash
-conda env create -p ./.venv -f SBOMs/conda-linux-64-lock.yml
-conda activate ./.venv
+micromamba env create -p ./.venv -f SBOMs/conda-linux-64-lock.yml
+micromamba activate ./.venv
 ```
 
-### **III. Подготовка данных**
+### IV. Подготовка данных
 
-Модели и видео не включены в репозиторий из-за ограничений размера. Чтобы скачать модели выполните следующие команды:
+Модели и видео не включены в репозиторий из-за ограничений размера. Чтобы скачать модели, выполните следующие команды:
 
 ```bash
 wget -P models/ https://github.com/ultralytics/assets/releases/download/v8.2.0/yolov8n-pose.pt && \
@@ -50,57 +59,48 @@ wget -P models/ https://github.com/ultralytics/assets/releases/download/v8.2.0/y
 wget -P models/ https://github.com/ultralytics/assets/releases/download/v8.2.0/yolov8x-pose.pt
 ```
 
-В директорию `videos` Вы можете добавить любое видео. В качестве демонстрации, Вы можете скачать видео с сайта [Pexels Free Stock Videos](https://www.pexels.com/videos/).  
-Например, [Mother and daughter with face masks at the park by Gustavo Fring from Pexels](https://www.pexels.com/video/mother-and-daughter-with-face-masks-at-the-park-4265036/).
+В директорию `videos` вы можете добавить любое видео. В качестве демонстрации вы можете скачать видео с сайта [Pexels Free Stock Videos](https://www.pexels.com/videos/).  
+Например: [Mother and daughter with face masks at the park by Gustavo Fring from Pexels](https://www.pexels.com/video/mother-and-daughter-with-face-masks-at-the-park-4265036/).
 
-### **IV. Настройка конфигурации через `.env`**
+### V. Настройка конфигурации через `.env`
 
 1. Создайте файл `.env` из шаблона:
-```bash
-cp .env.example .env
-```
+
+    ```bash
+    cp .env.example .env
+    ```
 
 2. Отредактируйте `.env` в любом текстовом редакторе (например, `nano`, `VSCode`):
-```bash
-nano .env
-```
 
-3. Настройте параметры: файл разделен на секции — измените значения в соответствии с Вашими задачами. Например:
+    ```bash
+    nano .env
+    ```
 
-```bash
-# === MODEL CONFIGURATION ===
-MODEL_NAME=yolov8m-pose.pt
-CONFIDENCE=0.8
+3. Настройте параметры: файл разделен на секции — измените значения в соответствии с вашими задачами. Например:
 
-# === VIDEO CONFIGURATION ===
-VIDEO_NAME=example-pexels.mp4
+    ```bash
+    # === MODEL CONFIGURATION ===
+    MODEL_NAME=yolov8m-pose.pt
+    CONFIDENCE=0.8
 
-# === DISPLAY SETTINGS ===
-DISPLAY_WIDTH=1020
-DISPLAY_HEIGHT=720
+    # === VIDEO CONFIGURATION ===
+    VIDEO_NAME=example-pexels.mp4
 
-# === PATH CONFIGURATION ===
-MODELS_DIR=models
-VIDEOS_DIR=videos
-```
+    # === DISPLAY SETTINGS ===
+    DISPLAY_WIDTH=1020
+    DISPLAY_HEIGHT=720
 
-### **V. Запуск приложения**
+    # === PATH CONFIGURATION ===
+    MODELS_DIR=models
+    VIDEOS_DIR=videos
+    ```
+
+### VI. Запуск приложения
 
 ```bash
 python -m app.main
 ```
 
-## **Лицензия**
+## Лицензия
 
-Проект распространяется под лицензией [BSD-3-Clause](LICENSE). 
-
-> **Внимание**  
-> Проект включает сторонние компоненты с отдельными лицензиями, которые могут отличаться от BSD-3-Clause.  
-> Полный список лицензий зависимостей доступен в файле [THIRD_PARTY_LICENSES.md](SBOMs/THIRD_PARTY_LICENSES.md).
-
-## **Инструменты разработки**
-Проект использует следующие инструменты для обеспечения воспроизводимости и управления зависимостями:
-
-- [Micromamba](https://github.com/mamba-org/mamba), ультрабыстрая реализация [Conda](https://github.com/conda/conda) для создания изолированных окружений.
-- [conda-lock](https://github.com/conda/conda-lock), утилита для генерации [точного lock-файла](SBOMs/conda-linux-64-lock.yml) для гарантии идентичного воссоздания окружения на любых системах.
-- [pip-licenses](https://github.com/raimon49/pip-licenses), утилита для генерации файла [THIRD_PARTY_LICENSES.md](SBOMs/THIRD_PARTY_LICENSES.md) с лицензиями всех conda-зависимостей.
+Каждый файл в этом репозитории распространяется под лицензией [MIT No Attribution License](LICENSE.txt).
