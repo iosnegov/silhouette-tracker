@@ -2,6 +2,17 @@
 
 *A real-time human pose estimation pipeline, fully configured within an isolated Conda environment for effortless setup, reproducibility, and portability.*
 
+> [!WARNING]
+> **Project Archived**
+> 
+> This project is no longer actively maintained. 
+> 
+> **Context:**  
+> Originally, this repository began as a university assignment. Rather than simply completing the task and discarding the code, I chose to expand it into a structured mini-project to explore human pose estimation and computer vision concepts. That said, it was purely a personal experiment and was never intended to be a production-ready or educational tool.
+> 
+> **Reason for Archiving:**  
+> Consequently, I no longer have an interest in further maintaining this codebase. This repository is now archived purely as a historical artifact, serving as a snapshot of my early learning journey and a reminder of where I started in software development.
+
 ## Available Documentation / Доступная документация
 
 - [English Documentation](README.md) (current document / текущий документ)
